@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Role } from 'src/app/models/login/staff.model';
 declare var $: any;
 
 @Component({
@@ -8,11 +9,13 @@ declare var $: any;
 })
 export class DashboardComponent implements OnInit {
 
+  UserRoleStatut :Role;
 
   constructor() { }
 
   ngOnInit(): void {
-
+    this.UserRoleStatut = JSON.parse(sessionStorage.getItem('connectedStaff')).role;
+    console.log("UserRoleStatut i s "+this.UserRoleStatut );
 
 
     // Toggle the side navigation

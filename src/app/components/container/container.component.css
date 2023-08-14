@@ -4216,9 +4216,11 @@
     }
     .navbar-expand-sm .navbar-nav {
       flex-direction: row;
+      
     }
     .navbar-expand-sm .navbar-nav .dropdown-menu {
       position: absolute;
+      
     }
     .navbar-expand-sm .navbar-nav .nav-link {
       padding-right: 0.5rem;
@@ -4236,7 +4238,7 @@
       flex-basis: auto;
     }
     .navbar-expand-sm .navbar-toggler {
-      display: none;
+      display: flex;
     }
   }
   

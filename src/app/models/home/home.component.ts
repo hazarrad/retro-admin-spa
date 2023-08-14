@@ -67,6 +67,8 @@ export class HomeComponent implements OnInit {
   // }
 
   onSelectionChange(value = []) {
+
+    console.log("onSelectionChange " +JSON.stringify(this.selectedCustomers))
     this.selectAll = value.length === this.totalRecords;
     this.selectedCustomers = value;
   }
