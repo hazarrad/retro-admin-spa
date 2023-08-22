@@ -1,14 +1,15 @@
 <!-- Begin Page Content -->
 
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">List of Users</h1>
 
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <h1 class="h3 mb-2 text-gray-800">List of Users</h1>
+    <button icon="pi pi-pencil" class="btn btn-primary" (click)="openCreateModule()">Add Staff</button>
+</div>
 <div class="card">
-    <p-table #dt [value]="customers" selectionMode="multiple" [metaKeySelection]="metaKeySelection" dataKey="name"
-        [tableStyle]="{ 'min-width': '75rem' }" [selection]="selectedCustomers"
-        (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)" [paginator]="true"
-        [rows]="10" [totalRecords]="totalRecords" [scrollable]="true"
-        [globalFilterFields]="['name', 'country.name', 'company', 'representative.name']">
+    <p-table #dt [value]="staffList" dataKey="mail"
+        [tableStyle]="{ 'min-width': '75rem' }" [paginator]="true" [rows]="10" [totalRecords]="totalRecords"
+        [scrollable]="true" [globalFilterFields]="['firstName', 'lastName', 'mail', 'role']">
 
         <ng-template pTemplate="caption">
             <div class="table-header d-flex justify-content-between align-items-center flex-wrap ">
@@ -26,72 +27,80 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th style="width: 4rem"></th>
-                <th style="width: 3rem"></th>
-                <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
+                <!-- <th style="width: 4rem"></th>-->
+                <th style="width: 3rem"></th> 
+                <th pSortableColumn="firstName">FirstName <p-sortIcon field="firstName"></p-sortIcon>
                 </th>
-                <th pSortableColumn="country.name">Country <p-sortIcon field="country.name"></p-sortIcon>
+                <th pSortableColumn="lastName">Last Name <p-sortIcon field="lastName"></p-sortIcon>
                 </th>
-                <th pSortableColumn="company">Company <p-sortIcon field="company"></p-sortIcon>
+                <th pSortableColumn="mail">Mail <p-sortIcon field="mail"></p-sortIcon>
                 </th>
-                <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
-                </th>
-                <th pSortableColumn="representative.name">Representative <p-sortIcon field="representative.name">
+
+                <th pSortableColumn="role">role <p-sortIcon field="role">
                     </p-sortIcon>
                 </th>
+                <th style="width: 8rem"></th>
+
             </tr>
             <tr>
-                <th style="width: 4rem">
+                <!-- <th style="width: 4rem">
                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                </th>
-                <th style="width: 3rem"></th>
+                </th>-->
+                <th style="width: 3rem"></th> 
 
                 <th>
-                    <p-columnFilter type="text" field="name" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="country.name" matchMode="contains" [showMenu]="false">
+                    <p-columnFilter type="text" field="firstName" matchMode="contains" [showMenu]="false">
                     </p-columnFilter>
                 </th>
                 <th>
-                    <p-columnFilter type="text" field="company" matchMode="contains" [showMenu]="false">
+                    <p-columnFilter type="text" field="lastName" matchMode="contains" [showMenu]="false">
                     </p-columnFilter>
                 </th>
                 <th>
-                    <p-columnFilter type="text" field="status" matchMode="contains" [showMenu]="false"></p-columnFilter>
+                    <p-columnFilter type="text" field="mail" matchMode="contains" [showMenu]="false">
+                    </p-columnFilter>
                 </th>
+
                 <th>
                     <p-columnFilter type="text" field="representative" matchMode="contains" [showMenu]="false">
                     </p-columnFilter>
                 </th>
+                <th style="width: 8rem"></th>
+
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
-            <tr [pSelectableRow]="customer" [pSelectableRowIndex]="rowIndex">
-                <td style="width: 4rem">
-                    <p-tableCheckbox [value]="customer"></p-tableCheckbox>
-                </td>
+        <ng-template pTemplate="body" let-staff let-rowIndex="rowIndex" let-expanded="expanded">
+            <tr [pSelectableRow]="staff" [pSelectableRowIndex]="rowIndex">
+                <!-- <td style="width: 4rem">
+                    <p-tableCheckbox [value]="staff"></p-tableCheckbox>
+                </td>-->
                 <td style="width: 3rem">
-                    <button type="button" pButton pRipple [pRowToggler]="customer"
+                    <button type="button" pButton pRipple [pRowToggler]="staff"
                         class="p-button-text p-button-rounded p-button-plain"
                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td> 
+                <td class="text-center">{{ staff.firstName }}</td>
+                <td class="text-center">{{ staff.lastName }}</td>
+                <td class="text-center">{{ staff.mail }}</td>
+                <td class="text-center">{{ staff.role }}</td>
+
+                <td style="width: 8rem">
+                    <div class="d-flex justify-content-between ">
+                        <button pButton pRipple icon="pi pi-pencil" (click)="openCreateModule(staff)"
+                            class="p-button-rounded p-button-success mr-2"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                            (click)="deleteStaff(staff)"></button>
+                    </div>
                 </td>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.country.name }}</td>
-                <td>{{ customer.company }}</td>
-                <td>
-                    <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)"></p-tag>
-                </td>
-                <td>{{ customer.representative.name }}</td>
             </tr>
         </ng-template>
-        <ng-template pTemplate="rowexpansion" let-customer>
+        <ng-template pTemplate="rowexpansion" let-staff>
 
             <tr>
-                <td colspan="7" class="m-0 p-0">
+                <td colspan="6" class="m-0 p-0">
                     <div class="">
-                        <p-table [value]="[customer]" dataKey="id">
-                            <ng-template pTemplate="body" let-customer>
+                        <p-table [value]="[staff]" dataKey="id">
+                            <ng-template pTemplate="body" let-staff>
             <tr>
                 <th id="gi" class="table-header" colspan="6">
                     <div class="alert alert-warning m-0" role="alert">
@@ -104,36 +113,16 @@
                     ID
                 </th>
                 <td colspan="2">
-                    {{customer.id ? customer.id : '-'}}
+                    {{staff.id ? staff.id : '-'}}
                 </td>
                 <th id="tariff-name" class="row-header p-2" colspan="1">
                     Date
                 </th>
                 <td colspan="2">
-                    {{customer.date? customer.date : '-'}}
+                    {{staff.id? staff.id : '-'}}
                 </td>
             </tr>
-            <tr>
-                <th id="gi" class="table-header" colspan="6">
-                    <div class="alert alert-success m-0" role="alert">
-                        Balance information
-                    </div>
-                </th>
-            </tr>
-            <tr colspan="6">
-                <th id="tariff-id" class="row-header p-2" colspan="1">
-                    ID
-                </th>
-                <td colspan="2">
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header p-2" colspan="1">
-                    Balance
-                </th>
-                <td colspan="2">
-                    {{customer.balance? customer.balance : '-'}}
-                </td>
-            </tr>
+
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr>
@@ -149,3 +138,74 @@
 </ng-template>
 </p-table>
 </div>
+
+
+<p-dialog [(visible)]="createStaffDialog" [dismissableMask]="true" [style]="{ width: '850px' }" header="Add Staff"
+    [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form class="form-horizontal" [formGroup]="staffFromGroup">
+
+
+            <div class="row">
+                <div class="field col">
+                    <label for="name">First Name</label>
+                    <input type="text" pInputText id="firstName" name="firstName" formControlName="firstName" required
+                        autofocus />
+
+                </div>
+                <div class="field col">
+                    <label for="name">Last Name</label>
+                    <input type="text" pInputText id="lastName" name="lastName" formControlName="lastName" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field col">
+                    <label for="name">Cin Card</label>
+                    <input type="text" pInputText id="cinCard" name="cinCard" formControlName="cinCard" />
+                </div>
+                <div class="field col">
+                    <label for="name">Phone Number</label>
+                    <input type="text" pInputText id="phoneNumber" name="phoneNumber" formControlName="phoneNumber" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="field col">
+                    <label for="name">Mail</label>
+                    <input type="text" pInputText id="mail" name="mail" formControlName="mail" />
+                </div>
+
+                <div class="field col">
+                    <label for="name">Password</label>
+                    <input type="password" pInputText id="password" name="password" formControlName="password" />
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="field col">
+                    <label for="name">City</label>
+                    <input type="text" pInputText id="city" name="city" formControlName="city" />
+                </div>
+                <div class="field col">
+                    <label for="name">Role</label>
+                    <select name="role" formControlName="role" placeholder="role" class="form-control">
+                        <option *ngFor="let symbol of keys(roles)" [ngValue]="roles[symbol]">{{symbol}}</option>
+                    </select>
+                </div>
+            </div>
+
+
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button *ngIf="isNew" pButton pRipple label="Create" icon="pi pi-plus" class="p-button-text"
+            (click)="addStaff(staffFromGroup.value)"></button>
+        <button *ngIf="!isNew" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text"
+            (click)="updateStaff(staffFromGroup.value)"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-toast position="top-right"></p-toast>

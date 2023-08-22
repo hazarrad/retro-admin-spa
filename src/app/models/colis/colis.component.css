@@ -1,0 +1,8 @@
+button[icon="pi pi-angle-double-up"],
+button[icon="pi pi-angle-double-down"] {
+display: none !important;
+}
+
+button[icon="pi pi-angle-double-up"] {
+    display: none !important;
+}

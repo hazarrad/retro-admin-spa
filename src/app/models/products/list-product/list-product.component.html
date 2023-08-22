@@ -1,25 +1,16 @@
-<!-- Begin Page Content -->
-
-<!-- Page Heading -->
 <div class="d-flex justify-content-between align-items-center mb-5">
     <h1 class="h3 mb-2 text-gray-800">List of Products</h1>
-
-    <a class="collapse-item" routerLink="/createproduct" routerLinkActive="active"><button class="btn btn-primary">Add
-            Product</button></a>
-
+    <button icon="pi pi-pencil" class="btn btn-primary" (click)="openCreateModule()">Add Product</button>
 </div>
 <div class="card ">
     <p-table #dt [value]="productslist" dataKey="productName" [tableStyle]="{ 'min-width': '75rem' }" [paginator]="true"
         [rows]="5" [totalRecords]="totalRecords" [scrollable]="true"
         [globalFilterFields]="['productName', 'quantity', 'priceSell', 'leagues']">
-
         <ng-template pTemplate="caption">
             <div class="table-header d-flex justify-content-between align-items-center flex-wrap ">
                 <span>List of products</span>
-
                 <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
                     (click)="clear(dt)"></button>
-
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -42,12 +33,10 @@
                 </th>
                 <th pSortableColumn="leagues">leagues <p-sortIcon field="leagues"></p-sortIcon>
                 </th>
-                <th style="width: 7rem"></th>
+                <th style="width: 10rem"></th>
             </tr>
             <tr>
-
                 <th style="width: 3rem"></th>
-
                 <th>
                     <p-columnFilter type="text" field="productName" matchMode="contains" [showMenu]="false">
                     </p-columnFilter>
@@ -80,13 +69,11 @@
                     <p-columnFilter type="text" field="leagues" matchMode="contains" [showMenu]="false">
                     </p-columnFilter>
                 </th>
-
-                <th style="width: 7rem"></th>
+                <th style="width: 10rem"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product let-rowIndex="rowIndex" let-expanded="expanded">
             <tr [pSelectableRow]="product" [pSelectableRowIndex]="rowIndex">
-
                 <td style="width: 3rem">
                     <button type="button" pButton pRipple [pRowToggler]="product"
                         class="p-button-text p-button-rounded p-button-plain"
@@ -99,27 +86,32 @@
                         <p-tag [value]="product.leagues" [severity]="getSeverity(product.leagues)" width="200"></p-tag>
                     </div>
                 </td>
-                <td class="text-center">{{ product.quantity }}</td>
-                <td class="text-center">{{ product.priceSell }}</td>
-                <td class="text-center">{{ product.pricePerchase }}</td>
+                <!-- <td class="text-center" >{{ product.quantity }}</td> -->
+
+                <td class="text-center">
+                    <p-tag [value]="product.quantity" [severity]="getProductStatus(product.quantity)"></p-tag>
+                </td>
+                
+                <td class="text-center"><strong>{{ product.priceSell }}</strong></td>
+                <td class="text-center"><strong>{{ product.pricePerchase }}</strong></td>
                 <td class="text-center">
                     <p-tag [value]="product.leagues" [severity]="getSeverity(product.leagues)"></p-tag>
                 </td>
-
-                <td style="width: 7rem">
+                <td style="width: 10rem">
                     <div class="d-flex justify-content-between ">
                         <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                            (click)="editProduct(product)"></button>
+                            (click)="openModule(product)"></button>
                         <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                             (click)="deleteProduct(product)"></button>
+                        <button pButton pRipple icon="pi pi-link" class="p-button-rounded p-button-secondary"
+                            (click)="assignDialog(product)"></button>
                     </div>
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="rowexpansion" let-product>
-
             <tr>
-                <td colspan="7" class="m-0 p-0">
+                <td colspan="8" class="m-0 p-0">
                     <div class="">
                         <p-table [value]="[product]" dataKey="id">
                             <ng-template pTemplate="body" let-product>
@@ -181,14 +173,9 @@
 </p-table>
 </div>
 
-<p-dialog [(visible)]="productDialog" [style]="{ width: '850px' }" header="Product Details" [modal]="true"
+<p-dialog [(visible)]="productDialog" [dismissableMask]="true" [style]="{ width: '850px' }" header="Product Details" [modal]="true"
     styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <!-- <div class=" flex justify-content-center">
-
-            <img [src]="product.mainPic" alt="Image" class="block m-auto pb-3" width="100%" *ngIf="product.mainPic" />
-        </div> -->
-
         <div class="card d-flex justify-content-center align-items-center border-0 text-center">
             <p-galleria [value]="filterArray(product.showPic)" [responsiveOptions]="responsiveOptions"
                 [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5">
@@ -202,37 +189,6 @@
                 </ng-template>
             </p-galleria>
         </div>
-
-
-
-
-        <!-- <div [formGroup]="productFromGroup">
-           
-            <ng-container formArrayName="showPic">
-                <ng-container *ngFor="let adminForm of showPic.controls; let index = index">
-                    <div [formGroupName]="index">
-                        <input id="name" type="text" formControlName="name" />
-                    </div>
-                </ng-container>
-            </ng-container>
-            <button type="button" (click)="addNewAdmin()">Add</button>
-        </div> -->
-        <!-- <div class="col "  *ngFor="let item of product.showPic" let i=index;>
-            <div class="img-hover-zoom ">
-                <a href="#" style="text-decoration: none;  color: inherit;">
-                    <img src="{{item}}"
-                        class="card-img-top rounded border-0" alt="This zooms-in really well and smooth"> 
-                     </a>
-                        <input type="text" pInputText   value="{{item}}" name="showPic" formControlName="showPic"  [(ngModel)]="product.showPic"/>
-
-            </div>
-        
-        </div> 
-
-          
--->
-
-
         <div class="field">
             <label for="name">Name</label>
             <input type="text" pInputText id="name" [(ngModel)]="product.productName" required autofocus />
@@ -259,10 +215,8 @@
             <textarea id="description" pInputTextarea [(ngModel)]="product.details" required rows="3"
                 cols="20"></textarea>
         </div>
-
         <div class="row">
             <div class="field col">
-
                 <label for="inventoryStatus">Inventory Status</label>
                 <p-dropdown appendTo="body" [(ngModel)]="product.leagues" inputId="inventoryStatus"
                     [options]="statuses">
@@ -274,14 +228,13 @@
                     </ng-template>
                 </p-dropdown>
             </div>
-
             <div class="field col">
                 <label for="price">Price Perchase</label>
-                <p-inputNumber id="pricePerchase" [(ngModel)]="product.pricePerchase" mode="currency" currency="MAD" locale="en-US">
+                <p-inputNumber id="pricePerchase" [(ngModel)]="product.pricePerchase" mode="currency" currency="MAD"
+                    locale="en-US">
                 </p-inputNumber>
             </div>
         </div>
-
         <div class="row">
             <div class="field col">
                 <label for="price">Price</label>
@@ -299,6 +252,138 @@
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
         <button pButton pRipple label="Update" icon="pi pi-check" class="p-button-text"
             (click)="updateProduct(product)"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="assignColiDialog" [dismissableMask]="true" [style]="{ width: '850px' }" header="Assign Coli" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="row">
+            <div class="field col">
+                <label for="inventoryStatus">Choose Coli</label>
+                <p-dropdown appendTo="body" [options]="colisOptions" [(ngModel)]="selectedColi" optionLabel="id"
+                    [showClear]="true" placeholder="Select a Coli">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="selectedColi">
+                            <div>{{ selectedColi.id }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-coli pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                [class]="'flag flag-uk'" style="width: 18px" />
+                            <div>{{ coli.id }} - {{ coli.trackingNumber }} </div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Assign" icon="pi pi-check" class="p-button-text"
+            (click)="assignProduct(product)"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="createProductDialog" [dismissableMask]="true" [style]="{ width: '850px' }" header="Product Details" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form class="form-horizontal" [formGroup]="productFromGroup">
+            <div class="card d-flex justify-content-center align-items-center border-0 text-center">
+                <p-galleria [value]="filterArray(product.showPic)" [responsiveOptions]="responsiveOptions"
+                    [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5">
+                    <ng-template pTemplate="item" let-item>
+                        <img [src]="item" style="width: 100%;" />
+                    </ng-template>
+                    <ng-template pTemplate="thumbnail" let-item>
+                        <div class=" justify-content-center px-2" width="100">
+                            <img [src]="item" width="100" />
+                        </div>
+                    </ng-template>
+                </p-galleria>
+            </div>
+            <div class="field">
+                <label for="name">Name</label>
+                <input type="text" pInputText id="productName" name="productName" formControlName="productName" required
+                    autofocus />
+                <small class="p-error" *ngIf="submitted && !product.productName">Name is required.</small>
+            </div>
+            <div class="field">
+                <label for="name">Main Image</label>
+                <div class="d-flex justify-content-between pt-1 align-items-center text-center">
+                    <input type="text" pInputText name="mainPic" formControlName="mainPic" />
+                    <img [src]="product.mainPic" alt="mainPic" width="60" class="zoom shadow-4 px-1" />
+                </div>
+            </div>
+            <div class="field">
+                <label for="name">Show Images</label>
+                <div class="d-flex justify-content-between pt-1 align-items-center text-center"
+                    *ngFor="let val of product.showPic; let i = index;trackBy:trackByIdx">
+                    <input type="text" pInputText name="showPic" formControlName="showPic" />
+                    <img *ngIf="product.showPic[i] !=null && product.showPic[i]!=''" [src]="product.showPic[i]"
+                        alt="showPic" width="60" class="zoom shadow-4 px-1" />
+                </div>
+            </div>
+            <div class="field">
+                <label for="description">Description</label>
+                <textarea id="description" pInputTextarea name="details" formControlName="details" required rows="3"
+                    cols="20"></textarea>
+            </div>
+            <div class="field">
+                <label for="inventoryStatus">Choose Coli</label>
+                <!-- <p-dropdown appendTo="body" [options]="colisOptions" name="selectedColi" formControlName="selectedColi"
+                    optionLabel="id" [showClear]="true" placeholder="Select a Coli" optionValue="selectedColi">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="selectedColi">
+                            <div>{{ selectedColi.id }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-coli pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+                                [class]="'flag flag-uk'" style="width: 18px" />
+                            <div>{{ coli.id }} - {{ coli.trackingNumber }} </div>
+                        </div>
+                    </ng-template>
+
+                </p-dropdown>
+                 -->
+                <p-dropdown appendTo="body" [options]="colisOptions" placeholder="Select a coli" optionLabel="id"
+                    dataKey="selectedColi" optionValue="id" formControlName="selectedColi"></p-dropdown>
+            </div>
+            <div class="row">
+                <div class="field col">
+                    <label for="inventoryStatus">Inventory Status</label>
+                    <p-dropdown appendTo="body" [options]="statuses" placeholder="Select a league" optionLabel="label"
+                        dataKey="leagues" optionValue="label" formControlName="leagues"></p-dropdown>
+                </div>
+                <div class="field col">
+                    <label for="price">Price Perchase</label>
+                    <p-inputNumber id="pricePerchase" name="pricePerchase" formControlName="pricePerchase"
+                        mode="currency" currency="MAD" locale="en-US">
+                    </p-inputNumber>
+                </div>
+            </div>
+            <div class="row">
+                <div class="field col">
+                    <label for="price">Price</label>
+                    <p-inputNumber id="price" name="priceSell" formControlName="priceSell" mode="currency"
+                        currency="MAD" locale="en-US">
+                    </p-inputNumber>
+                </div>
+                <div class="field col">
+                    <label for="quantity">Quantity</label>
+                    <p-inputNumber id="quantity" name="quantity" formControlName="quantity"></p-inputNumber>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+
+        <button pButton pRipple label="Create" icon="pi pi-plus" class="p-button-text"
+            (click)="addProduct(productFromGroup.value)"></button>
     </ng-template>
 </p-dialog>
 

@@ -1,69 +1,42 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { Customer, Representative } from '../home/customer';
-import { CustomerService } from '../home/customerservice.service';
+import { Products } from '../products/products.model';
+import { Colis } from './colis.model';
+import { ColisService } from './colisService.service';
 
 @Component({
   selector: 'app-colis',
   templateUrl: './colis.component.html',
   styleUrls: ['./colis.component.css']
+
 })
 export class ColisComponent implements OnInit {
-  customers!: Customer[];
 
+  colislist!: Colis[];
+  statuses!: any[];
+  assignedProducts!: Products[];
+
+  coli!: Colis;
+  coliDialog: boolean = false;
+  visible: boolean = false;
+  submitted: boolean = false;
+  isNew: boolean = false;
+  selectedColi: any | undefined;
   totalRecords!: number;
-
-  loading: boolean = false;
-
-  representatives!: Representative[];
-
-  selectAll: boolean = false;
   metaKeySelection: boolean = true;
 
-  selectedCustomers!: Customer[];
-  constructor(private customerService: CustomerService) { }
+  constructor(private colisService: ColisService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
-    this.representatives = [
-      { name: 'Amy Elsner', image: 'amyelsner.png' },
-      { name: 'Anna Fali', image: 'annafali.png' },
-      { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-      { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-      { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-      { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-      { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-      { name: 'Onyama Limba', image: 'onyamalimba.png' },
-      { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-      { name: 'Xuxue Feng', image: 'xuxuefeng.png' }
-    ];
-
-
-    this.customerService.getCustomers().then((res) => {
-      this.customers = res.customers;
-      this.totalRecords = res.totalRecords;
-      this.loading = false;
+    this.colisService.findAllColis().subscribe((res) => {
+      this.colislist = res['content'];
     });
-
-    this.loading = true;
-  }
-
-  onSelectionChange(value = []) {
-    this.selectAll = value.length === this.totalRecords;
-    this.selectedCustomers = value;
-  }
-
-  onSelectAllChange(event: any) {
-    const checked = event.checked;
-
-    if (checked) {
-      this.customerService.getCustomers().then((res) => {
-        this.selectedCustomers = res.customers;
-        this.selectAll = true;
-      });
-    } else {
-      this.selectedCustomers = [];
-      this.selectAll = false;
-    }
+    this.statuses = [
+      { label: 'In shipping', value: 'In shipping' },
+      { label: 'Landed', value: 'Landed' },
+      { label: 'Awaiting shipment', value: 'Awaiting shipment' }
+    ];
   }
 
   clear(table: Table) {
@@ -72,13 +45,13 @@ export class ColisComponent implements OnInit {
 
   getSeverity(status: string) {
     switch (status) {
-      case 'unqualified':
+      case 'Awaiting shipment':
         return 'danger';
 
-      case 'qualified':
+      case 'Landed':
         return 'success';
 
-      case 'new':
+      case 'In shipping':
         return 'info';
 
       case 'negotiation':
@@ -88,4 +61,74 @@ export class ColisComponent implements OnInit {
         return null;
     }
   }
+
+  addColi(coli: Colis) {
+    this.coli = coli;
+    this.colisService.createColis(this.coli).subscribe(data => {
+      this.colislist.unshift(data);
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Coli Created', life: 3000 });
+      this.coliDialog = false;
+    });
+  }
+
+  deleteColi(coliId: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete that coli' + coliId + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.colisService.deleteColis(coliId).subscribe((res) => {
+          this.colislist = this.colislist.filter((val) => val.id !== coliId);
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Coli Deleted', life: 3000 });
+        });
+      }
+    });
+  }
+
+  showAssignedProducts(coliId: any) {
+    this.selectedColi = coliId;
+    this.colisService.getAllAssignedProducts(coliId).subscribe((data) => {
+      this.assignedProducts = data;
+    })
+  }
+
+  updateColi(coli: Colis) {
+    this.coli = coli;
+    this.colisService.updateColis(this.coli).subscribe(data => {
+      let indexToUpdate = this.colislist.findIndex(item => item.id === data.id);
+      this.colislist[indexToUpdate] = data;
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Coli Updated', life: 3000 });
+      this.coliDialog = false;
+    });
+  }
+
+  openModule(coli?: Colis) {
+    this.isNew = coli == null;
+    this.coli = { ...coli };
+    this.coliDialog = true;
+    this.visible = true;
+  }
+
+  deleteProductFromColie(productId: any) {
+
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete that product' + productId + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.colisService.deleteProductFromColi(this.selectedColi, productId)
+          .subscribe((X) => {
+            this.assignedProducts = this.assignedProducts.filter((val) => val.id !== productId);
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product deleted', life: 3000 });
+          });
+      }
+    });
+
+  }
+
+  hideDialog() {
+    this.coliDialog = false;
+    this.submitted = false;
+  }
+
 }

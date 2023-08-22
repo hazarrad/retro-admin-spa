@@ -1,151 +1,236 @@
-<!-- Begin Page Content -->
+<!-- Main Content -->
+<div id="content">
+    <div class="container-fluid">
+        <h1 class="h3 mb-4 text-gray-800">Manage Colis </h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <h6 class="m-0 font-weight-bold text-primary">Colis</h6>
+                        <button icon="pi pi-pencil" class="btn btn-primary" (click)="openModule()">Add Coli</button>
+                    </div>
+                    <div class="card-body p-0 m-0">
+                        <p-table #dt [value]="colislist" selectionMode="multiple" [metaKeySelection]="metaKeySelection"
+                            dataKey="name" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="5"
+                            [totalRecords]="totalRecords" [scrollable]="true"
+                            [globalFilterFields]="['id', 'trackingNumber', 'status','quantity']">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header d-flex justify-content-between align-items-center flex-wrap">
+                                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                                        (click)="clear(dt)"></button>
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text"
+                                            (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                            placeholder="Search..." />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="id">Colis ID<p-sortIcon field="id"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="trackingNumber">Tracking Number<p-sortIcon
+                                            field="trackingNumber"></p-sortIcon>
+                                    </th>
+                                    <!-- <th pSortableColumn="paymentTotal" >Payment Total<p-sortIcon
+                                            field="paymentTotal"></p-sortIcon>
+                                    </th> -->
+                                    <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon>
+                                    </th>
+                                    <!-- <th pSortableColumn="chargeImportation" >Charge Importation<p-sortIcon
+                                            field="chargeImportation"></p-sortIcon>
+                                    </th> -->
+                                    <th pSortableColumn="quantity">Quantity<p-sortIcon field="quantity">
+                                        </p-sortIcon>
+                                    </th>
+                                    <!-- <th pSortableColumn="details" >Details<p-sortIcon field="details"></p-sortIcon>
+                                    </th> -->
+                                    <th style="width: 10rem;"></th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p-columnFilter type="text" field="id" matchMode="contains" [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="trackingNumber" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text"  field="paymentTotal" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th> -->
+                                    <th>
+                                        <p-columnFilter type="text" field="status" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <!-- <th>
+                                        <p-columnFilter  type="text" field="chargeImportation" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th> -->
+                                    <th>
+                                        <p-columnFilter type="text" field="quantity" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text"  field="details" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th> -->
+                                    <th style="width: 10rem;"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-colis let-rowIndex="rowIndex" let-expanded="expanded">
+                                <tr [pSelectableRow]="colis" [pSelectableRowIndex]="rowIndex">
+                                    <td class="text-center">{{ colis.id }}</td>
+                                    <td class="text-center">{{ colis.trackingNumber }}</td>
+                                    <!-- <td class="text-center" >{{ colis.paymentTotal }}</td> -->
+                                    <td class="text-center">{{ colis.status }}</td>
+                                    <!-- <td class="text-center" >{{ colis.chargeImportation }}</td> -->
+                                    <td class="text-center">{{ colis.quantity }}</td>
+                                    <!-- <td class="text-center" >{{ colis.details }}</td> - -->
+                                    <td style="width: 10rem">
+                                        <div class="d-flex justify-content-between ">
+                                            <button pButton pRipple icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-success mr-2"
+                                                (click)="openModule(colis)"></button>
+                                            <button pButton pRipple icon="pi pi-trash"
+                                                class="p-button-rounded p-button-warning"
+                                                (click)="deleteColi(colis.id)"></button>
+                                            <button pButton pRipple icon="pi pi-link"
+                                                class="p-button-rounded p-button-secondary"
+                                                (click)="showAssignedProducts(colis.id)"></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div class="flex align-items-center justify-content-between">
+                                    In total there are {{colislist ? colislist.length : 0 }} colis.
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Brand Buttons</h6>
+                    </div>
+                    <div class="card-body">
+                        <p>Google and Facebook buttons are available featuring each company's respective
+                            brand color. They are used on the user login and registration pages.</p>
+                        <p>You can create more custom buttons by adding a new color variable in the
+                            <code>_variables.scss</code> file and then using the Bootstrap button variant
+                            mixin to create a new style, as demonstrated in the <code>_buttons.scss</code>
+                            file.
+                        </p>
+                        <a href="#" class="btn btn-google btn-block"><i class="fab fa-google fa-fw"></i>
+                            .btn-google</a>
+                        <a href="#" class="btn btn-facebook btn-block"><i class="fab fa-facebook-f fa-fw"></i>
+                            .btn-facebook</a>
 
-<!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Manage Colis</h1>
-
-<div class="card">
-    <p-table #dt [value]="customers" selectionMode="multiple" [metaKeySelection]="metaKeySelection" dataKey="name"
-        [tableStyle]="{ 'min-width': '75rem' }" [selection]="selectedCustomers"
-        (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)" [paginator]="true"
-        [rows]="10" [totalRecords]="totalRecords" [scrollable]="true"
-        [globalFilterFields]="['name', 'country.name', 'company', 'representative.name']">
-
-        <ng-template pTemplate="caption">
-            <div class="table-header d-flex justify-content-between align-items-center flex-wrap ">
-                <span>List of colis</span>
-
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                    (click)="clear(dt)"></button>
-
-                <span class="p-input-icon-left">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Global Search" style="width: 100%;" />
-                </span>
+                    </div>
+                </div>
             </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th style="width: 4rem"></th>
-                <th style="width: 3rem"></th>
-                <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
-                </th>
-                <th pSortableColumn="country.name">Country <p-sortIcon field="country.name"></p-sortIcon>
-                </th>
-                <th pSortableColumn="company">Company <p-sortIcon field="company"></p-sortIcon>
-                </th>
-                <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
-                </th>
-                <th pSortableColumn="representative.name">Representative <p-sortIcon field="representative.name">
-                    </p-sortIcon>
-                </th>
-            </tr>
-            <tr>
-                <th style="width: 4rem">
-                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                </th>
-                <th style="width: 3rem"></th>
-
-                <th>
-                    <p-columnFilter type="text" field="name" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="country.name" matchMode="contains" [showMenu]="false">
-                    </p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="company" matchMode="contains" [showMenu]="false">
-                    </p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="status" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="representative" matchMode="contains" [showMenu]="false">
-                    </p-columnFilter>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
-            <tr [pSelectableRow]="customer" [pSelectableRowIndex]="rowIndex">
-                <td style="width: 4rem">
-                    <p-tableCheckbox [value]="customer"></p-tableCheckbox>
-                </td>
-                <td style="width: 3rem">
-                    <button type="button" pButton pRipple [pRowToggler]="customer"
-                        class="p-button-text p-button-rounded p-button-plain"
-                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                </td>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.country.name }}</td>
-                <td>{{ customer.company }}</td>
-                <td>
-                    <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)"></p-tag>
-                </td>
-                <td>{{ customer.representative.name }}</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="rowexpansion" let-customer>
-
-            <tr>
-                <td colspan="7" class="m-0 p-0">
-                    <div class="">
-                        <p-table [value]="[customer]" dataKey="id">
-                            <ng-template pTemplate="body" let-customer>
-            <tr>
-                <th id="gi" class="table-header" colspan="6">
-                    <div class="alert alert-warning m-0" role="alert">
-                        General information
+            <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Products Assigned</h6>
                     </div>
-                </th>
-            </tr>
-            <tr colspan="6">
-                <th id="tariff-id" class="row-header p-2" colspan="1">
-                    ID
-                </th>
-                <td colspan="2">
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header p-2" colspan="1">
-                    Date
-                </th>
-                <td colspan="2">
-                    {{customer.date? customer.date : '-'}}
-                </td>
-            </tr>
-            <tr>
-                <th id="gi" class="table-header" colspan="6">
-                    <div class="alert alert-success m-0" role="alert">
-                        Balance information
+                    <div class="card-body">
+                        <p>Allocation between colis and products is a key part of the relationship for inventory
+                            management, below you will find all the products that are assigned to each coli in order to
+                            customize the process and have a clear view of our inventory
+                        </p>
+                        <p-listbox [options]="assignedProducts" [listStyle]="{ 'max-height': '55rem' }"
+                            [style]="{ width: '100%' ,'border':'0' }">
+                            <ng-template let-product pTemplate="item">
+                                <div class="d-flex justify-content-between " style="width: 100%;">
+                                    <div class="d-flex justify-content-between ">
+                                        <div>
+                                            <img src="{{ product.mainPic }}" width="100" [alt]="product.productName" />
+                                        </div>
+                                        <div class="px-1 ">
+                                            <small>{{ product.productName }}</small><br>
+                                            <i class="pi pi-tag vertical-align-middle "></i>
+                                            <small class="vertical-align-middle line-height-1">{{ product.leagues
+                                                }}</small>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button pButton pRipple icon="pi pi-trash"
+                                            (click)="deleteProductFromColie(product.id)"
+                                            class="p-button-rounded p-button-warning"></button>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-listbox>
                     </div>
-                </th>
-            </tr>
-            <tr colspan="6">
-                <th id="tariff-id" class="row-header p-2" colspan="1">
-                    ID
-                </th>
-                <td colspan="2">
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header p-2" colspan="1">
-                    Balance
-                </th>
-                <td colspan="2">
-                    {{customer.balance? customer.balance : '-'}}
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="6">There are no order for this product yet.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</td>
-</tr>
 
+<p-dialog [(visible)]="coliDialog" [dismissableMask]="true" [style]="{ width: '850px' }" header="Coli Details"
+    [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="name">Tracking Number</label>
+            <input type="text" pInputText id="name" [(ngModel)]="coli.trackingNumber" required autofocus />
+            <small class="p-error" *ngIf="submitted && !coli.trackingNumber">Tracking Number is required.</small>
+        </div>
+        <div class="row">
+            <div class="field col">
+                <label for="inventoryStatus">Status</label>
+                <p-dropdown appendTo="body" [(ngModel)]="coli.status" inputId="status" [options]="statuses">
+                    <ng-template pTemplate="selectedItem">
+                        <p-tag [value]="coli.status" [severity]="getSeverity(coli.status)"></p-tag>
+                    </ng-template>
+                    <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.label" [severity]="getSeverity(option.label)"></p-tag>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="field col">
+                <label for="price">Payment Total</label>
+                <p-inputNumber id="paymentTotal" [(ngModel)]="coli.paymentTotal" mode="currency" currency="MAD"
+                    locale="en-US">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="row">
+            <div class="field col">
+                <label for="price">Charge Importation</label>
+                <p-inputNumber id="chargeImportation" [(ngModel)]="coli.chargeImportation" mode="currency"
+                    currency="MAD" locale="en-US">
+                </p-inputNumber>
+            </div>
+            <div class="field col">
+                <label for="quantity">Quantity</label>
+                <p-inputNumber type="Number" pInputNumber id="quantity" [(ngModel)]="coli.quantity"></p-inputNumber>
+            </div>
+        </div>
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="coli.details" required rows="3" cols="20"></textarea>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button *ngIf="!isNew" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text"
+            (click)="updateColi(coli)"></button>
+        <button *ngIf="isNew" pButton pRipple label="Create" icon="pi pi-plus" class="p-button-text"
+            (click)="addColi(coli)"></button>
+    </ng-template>
+</p-dialog>
 
-</ng-template>
-</p-table>
-</div>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<p-toast position="top-right"></p-toast>

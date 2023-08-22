@@ -34,16 +34,22 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { LoginComponent } from './models/login/login.component';
 import { UsersComponent } from './models/users/users.component';
 import { CommonModule } from '@angular/common';
-import { AddProductComponent } from './models/products/add-product/add-product.component';
 import { ListProductComponent } from './models/products/list-product/list-product.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessagesModule } from 'primeng/messages';
-import {ToastModule} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { GalleriaModule } from 'primeng/galleria';
+import { ToolbarModule } from 'primeng/toolbar';
 
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { OrderListModule } from 'primeng/orderlist';
+import { ListboxModule } from 'primeng/listbox';
+import { DataViewModule } from 'primeng/dataview';
+
+
+import { ConfirmationService, MessageService } from 'primeng/api';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +61,6 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     PageNotFoundComponent,
     LoginComponent,
     UsersComponent,
-    AddProductComponent,
     ListProductComponent
   ],
   imports: [
@@ -93,9 +98,14 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
     DynamicDialogModule,
     DialogModule,
     GalleriaModule,
-    
+    ToolbarModule,
+    OrderListModule,
+    ListboxModule,
+    DataViewModule
+
+
   ],
-  providers: [],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

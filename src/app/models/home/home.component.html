@@ -1,213 +1,355 @@
-<!-- Begin Page Content -->
-
-<!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Tables</h1>
-<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-    For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official
-        DataTables documentation</a>.</p>
-
-
-<div class="card">
-    <p-table #dt [value]="customers" selectionMode="multiple" [metaKeySelection]="metaKeySelection" dataKey="name"
-        [tableStyle]="{ 'min-width': '75rem' }" [selection]="selectedCustomers"
-        (selectionChange)="onSelectionChange($event)" (selectAllChange)="onSelectAllChange($event)" [paginator]="true"
-        [rows]="10" [totalRecords]="totalRecords" [scrollable]="true"
-        [globalFilterFields]="['name', 'country.name', 'company', 'representative.name']">
-        
-        <ng-template pTemplate="caption">
-            <div class="table-header d-flex justify-content-between align-items-center flex-wrap ">
-                <span>List of orders</span>
-
-                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                    (click)="clear(dt)"></button>
-
-                <span class="p-input-icon-left">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Global Search" style="width: 100%;"/>
-                </span>
+<!-- Main Content -->
+<div id="content">
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Manage Orders</h1>
+        </div>
+        <div class="row">
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Earnings (Monthly)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-            <tr>
-                <th style="width: 4rem"></th>
-                <th style="width: 3rem"></th>
-                <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon>
-                </th>
-                <th pSortableColumn="country.name">Country <p-sortIcon field="country.name"></p-sortIcon>
-                </th>
-                <th pSortableColumn="company">Company <p-sortIcon field="company"></p-sortIcon>
-                </th>
-                <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
-                </th>
-                <th pSortableColumn="representative.name">Representative <p-sortIcon field="representative.name">
-                    </p-sortIcon>
-                </th>
-            </tr>
-            <tr>
-                <th style="width: 4rem">
-                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                </th>
-                <th style="width: 3rem"></th>
-
-                <th>
-                    <p-columnFilter type="text" field="name" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="country.name" matchMode="contains" [showMenu]="false">
-                    </p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="company" matchMode="contains" [showMenu]="false">
-                    </p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="status" matchMode="contains" [showMenu]="false"></p-columnFilter>
-                </th>
-                <th>
-                    <p-columnFilter type="text" field="representative" matchMode="contains" [showMenu]="false">
-                    </p-columnFilter>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
-            <tr [pSelectableRow]="customer" [pSelectableRowIndex]="rowIndex">
-                <td style="width: 4rem;">
-                    <p-tableCheckbox [value]="customer"></p-tableCheckbox>
-                </td>
-                <td style="width: 3rem">
-                    <button type="button" pButton pRipple [pRowToggler]="customer"
-                        class="p-button-text p-button-rounded p-button-plain"
-                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                </td>
-                <td>{{ customer.name }}</td>
-                <td>{{ customer.country.name }}</td>
-                <td>{{ customer.company }}</td>
-                <td>
-                    <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)"></p-tag>
-                </td>
-                <td>{{ customer.representative.name }}</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="rowexpansion" let-customer>
-
-            <tr>
-                <td colspan="7" class="m-0 p-0">
-                    <div class="">
-                        <p-table [value]="[customer]"  dataKey="id">
-                            <!-- <ng-template pTemplate="header">
-            <tr>
-                <th pSortableColumn="id">Id <p-sortIcon field="price"></p-sortIcon>
-                </th>
-                <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon>
-                </th>
-                <th pSortableColumn="balance">Balance <p-sortIcon field="balance"></p-sortIcon>
-                </th>
-
-            </tr>
-        </ng-template> -->
-        <ng-template pTemplate="body" let-customer>
-            <tr>
-                <th id="gi" class="table-header" colspan="6">
-                    <div class="alert alert-warning m-0" role="alert">
-                        General information
+            <!-- Earnings (Annual) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Earnings (Annual)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
                     </div>
-                </th>
-            </tr>
-            <tr colspan="6" >
-                <th id="tariff-id" class="row-header p-2" colspan="1">
-                    ID
-                </th>
-                <td colspan="2">
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header p-2" colspan="1">
-                    Date
-                </th>
-                <td colspan="2">
-                    {{customer.date? customer.date : '-'}}
-                </td>
-            </tr>
-            <tr>
-                <th id="gi" class="table-header" colspan="6">
-                    <div class="alert alert-success m-0" role="alert">
-                        Balance information
+                </div>
+            </div>
+            <!-- Tasks Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
+                                                aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
                     </div>
-                </th>
-            </tr>
-            <tr colspan="6" >
-                <th id="tariff-id" class="row-header p-2" colspan="1">
-                    ID
-                </th>
-                <td colspan="2">
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header p-2" colspan="1">
-                    Balance
-                </th>
-                <td colspan="2">
-                    {{customer.balance? customer.balance : '-'}}
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="6">There are no order for this product yet.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+                </div>
+            </div>
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Pending Requests</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center  py- ">
+                        <h6 class="m-0 font-weight-bold text-primary">List of Orders</h6>
+                        <button icon="pi pi-pencil" class="btn btn-primary" (click)="openModule()">Add Order</button>
+                    </div>
+                    <div class="card-body p-0 m-0">
+                        <p-table #dt [value]="listOfOrders" [paginator]="true" [rows]="8" [totalRecords]="totalRecords"
+                            [scrollable]="true"
+                            [globalFilterFields]="['name', 'clientName', 'clientNumber', 'city','amount','totalToPay']"
+                            selectionMode="single" [(selection)]="selectedOrder" dataKey="orderid"
+                            (onRowSelect)="onRowSelect($event)">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header d-flex justify-content-between align-items-center flex-wrap ">
+                                    <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                                        (click)="clear(dt)"></button>
+
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text"
+                                            (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                            placeholder="Global Search" style="width: 100%;" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="orderid">orderid <p-sortIcon field="orderid"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="clientName">Client Name <p-sortIcon field="clientName">
+                                        </p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="clientNumber">Number <p-sortIcon field="clientNumber">
+                                        </p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="city">City <p-sortIcon field="city">
+                                        </p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="amount">Amount <p-sortIcon field="amount">
+                                        </p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="totalToPay">Total To Pay <p-sortIcon field="totalToPay">
+                                        </p-sortIcon>
+                                    </th>
+
+                                    <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
+                                    </th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p-columnFilter type="text" field="orderid" matchMode="contains"
+                                            [showMenu]="false"></p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="clientName" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="clientNumber" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="city" matchMode="contains"
+                                            [showMenu]="false">
+                                        </p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="amount" matchMode="contains"
+                                            [showMenu]="false"></p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="totalToPay" matchMode="contains"
+                                            [showMenu]="false"></p-columnFilter>
+                                    </th>
+                                    <th>
+                                        <p-columnFilter type="text" field="status" matchMode="contains"
+                                            [showMenu]="false"></p-columnFilter>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-order>
+                                <tr [pSelectableRow]="order">
+                                    <td class="text-center">{{ order.orderid }}</td>
+                                    <td class="text-center">{{ order.clientName }}</td>
+                                    <td class="text-center">{{ order.clientNumber }}</td>
+                                    <td class="text-center">{{ order.city }}</td>
+                                    <td class="text-center">{{ order.amount }}</td>
+                                    <td class="text-center">{{ order.totalToPay | currency:'MAD'}}</td>
+                                    <td class="text-center">
+                                        <p-tag [value]="order.status" [severity]="getSeverityStatus(order.status)">
+                                        </p-tag>
+                                    </td>
+                                    <td class="text-center">
+                                        <button pButton pRipple icon="pi pi-pencil" (click)="openModule(order)"
+                                            class="p-button-rounded p-button-success mx-2"></button>
+                                        <button pButton pRipple icon="pi pi-trash"
+                                            class="p-button-rounded p-button-warning"
+                                            (click)="deleteOrder(order)"></button>
+
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary">
+                                <div class="flex align-items-center justify-content-between">
+                                    In total there are {{listOfOrders ? listOfOrders.length : 0 }} orders.
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+                    </div>
+                    <div class="card-body">
+                        The styling for this basic card example is created by using default Bootstrap
+                        utility classes. By using utility classes, the style of the card component can be
+                        easily modified with no need for any custom CSS!
+
+                        <p-listbox [options]="assignedProducts" [listStyle]="{ 'max-height': '55rem' }"
+                            [style]="{ width: '100%' ,'border':'0' }">
+                            <ng-template let-product pTemplate="item">
+                                <div class="d-flex justify-content-between p-0 m-0" style="width: 100%;">
+                                    <div class="d-flex justify-content-between p-0 m-0">
+                                        <div>
+                                            <img src="{{ product.mainPic }}" width="100" [alt]="product.productName" />
+                                        </div>
+                                        <div class="px-1 ">
+                                            <small>{{ product.productName }}</small><br>
+                                            <i class="pi pi-tag vertical-align-middle "></i>
+                                            <small class="vertical-align-middle line-height-1">{{ product.leagues
+                                                }}</small>
+                                        </div>
+                                    </div>
+                                    <!-- <div>
+                                        <button pButton pRipple icon="pi pi-trash"
+                                            (click)="deleteProductFromColie(product.id)"
+                                            class="p-button-rounded p-button-warning"></button>
+                                    </div> -->
+                                </div>
+                            </ng-template>
+                        </p-listbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</td>
-</tr>
 
-<!-- <tr style="width: 100%;">
-                <td colspan="7">
-                    <p-table [value]="[customer]" dataKey="orderid" [tableStyle]="{ 'min-width': '100rem' }">
-                        <ng-template pTemplate="body" let-customer>
-
-            <tr>
-                <th id="gi" class="table-header" colspan="4">General information</th>
-            </tr>
-            <tr>
-                <th id="tariff-id" class="row-header">
-                    ID
-                </th>
-                <td>
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header">
-                    date
-                </th>
-                <td>
-                    {{customer.date? customer.date : '-'}}
-                </td>
-            </tr>
-            <tr>
-                <th id="tariff-id" class="row-header">
-                    ID
-                </th>
-                <td>
-                    {{customer.id ? customer.id : '-'}}
-                </td>
-                <th id="tariff-name" class="row-header">
-                    date
-                </th>
-                <td>
-                    {{customer.balance? customer.balance : '-'}}
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-    </td>
-    </tr> -->
-<!-- <tr>
-                <td>{{ customer.id }}</td>
-                <td>{{ customer.code }}</td>
-                <td>{{ customer.balance }}</td>
-
-            </tr> -->
+<p-dialog [(visible)]="orderDialog" [dismissableMask]="true" [style]="{ width: '950px' }" header="Add order"
+    [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form class="form-horizontal" [formGroup]="orderFormGroup">
 
 
-</ng-template>
-</p-table>
-</div>
+            <div class="row">
+                <div class="field col">
+                    <label for="name">client Name</label>
+                    <input type="text" pInputText id="clientName" name="clientName" formControlName="clientName"
+                        required autofocus />
+
+                </div>
+                <div class="field col">
+                    <label for="name">clientNumber</label>
+                    <input type="text" pInputText id="clientNumber" name="clientNumber"
+                        formControlName="clientNumber" />
+                </div>
+            </div>
+
+            <div class="row">
+
+                <label for="name">Choose Product</label>
+                <!-- <form class="form-horizontal" [formGroup]="lessonForm"> -->
+                <!-- <p-dropdown appendTo="body" [options]="productslist" optionLabel="id" formControlName="product"
+                        dataKey="id" placeholder="Select">
+                        <ng-template pTemplate="item" let-item>
+                            <div class="d-flex justify-content-between">
+                                <img [src]="item.mainPic" width="100" />
+                                <h2>{{item.productName}}</h2>
+                            </div>
+                        </ng-template>
+                    </p-dropdown> -->
+
+                <p-multiSelect appendTo="body" [options]="productslist" optionLabel="productName"
+                    formArrayName="shoppingCart" formControlName="shoppingCart" dataKey="id">
+                    <ng-template pTemplate="item" let-item>
+                        <div class="d-flex justify-content-between align-items-center" style="width: 150px;">
+                            <img [src]="item.mainPic" [alt]="item.productName" width="60" class="shadow-4" />
+                            <div class=" d-flex  flex-column px-1">
+                                <h5>{{item.productName}}</h5>
+                                <p-tag [value]="item.leagues" [severity]="getSeverity(item.leagues)" width="200">
+                                </p-tag>
+
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-multiSelect>
+
+                <!-- </form> -->
+
+            </div>
+
+
+            <div class="row">
+                <div class="field col">
+                    <label for="name">city</label>
+                    <!-- <p-dropdown appendTo="body" [options]="cities" id="city" name="city" formControlName="city">
+                    </p-dropdown> -->
+
+                    <p-dropdown appendTo="body" [options]="cities" [filter]="true" filterBy="value" [showClear]="true"
+                        placeholder="Select a Country" id="city" name="city" formControlName="city">
+                        <!-- <ng-template pTemplate="selectedItem">
+                            <div class="flex align-items-center gap-2" *ngIf="selectedCountry">
+                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px"/>
+                                <div>{{ selectedCountry.name }}</div>
+                            </div>
+                        </ng-template> -->
+                        <!-- <ng-template let-city pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ city.value }}</div>
+                            </div>
+                        </ng-template> -->
+                    </p-dropdown>
+                </div>
+                <div class="field col">
+                    <label for="name">Phone Number</label>
+                    <input type="text" pInputText id="clientAddress" name="clientAddress"
+                        formControlName="clientAddress" />
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- <div class="field col">
+                    <label for="name">Amount</label>
+                    <input type="number" pInputText id="amount" name="amount" formControlName="amount" />
+                </div> -->
+
+                <div class="field col">
+                    <label for="name">status</label>
+                    <!-- <input type="status" pInputText id="status" name="status" formControlName="status" /> -->
+                    <p-dropdown appendTo="body" [filter]="true" filterBy="value" [showClear]="true"
+                        placeholder="Select a Status" [options]="status" id="status" name="status"
+                        formControlName="status">
+                    </p-dropdown>
+                </div>
+            </div>
+
+
+
+
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button *ngIf="isNew" pButton pRipple label="Create" icon="pi pi-plus" class="p-button-text"
+            (click)="createOrder(orderFormGroup.value)"></button>
+        <button *ngIf="!isNew" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text"
+            (click)="updateOrder()"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-toast position="top-right"></p-toast>

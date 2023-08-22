@@ -1,3 +1,4 @@
+import { an } from "@fullcalendar/core/internal-common";
 
 
 
@@ -11,7 +12,8 @@ export class Products {
   mainPic: string;
   showPic: string[];
   leagues: string;
-
+  selectedColi: any;
+  
 
 }
 

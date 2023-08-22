@@ -7,7 +7,6 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ColisComponent } from './models/colis/colis.component';
 import { HomeComponent } from './models/home/home.component';
 import { LoginComponent } from './models/login/login.component';
-import { AddProductComponent } from './models/products/add-product/add-product.component';
 import { ListProductComponent } from './models/products/list-product/list-product.component';
 import { UsersComponent } from './models/users/users.component';
 
@@ -28,7 +27,6 @@ const routes: Routes = [
           { path: 'colis', component: ColisComponent },
           { path: 'users', component: UsersComponent },
           { path: 'listproducts', component: ListProductComponent },
-          { path: 'createproduct', component: AddProductComponent }
 
         ]
       }

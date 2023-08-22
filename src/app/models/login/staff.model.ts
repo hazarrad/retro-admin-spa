@@ -15,7 +15,8 @@ export class Staff {
   role: Role;
   password: string;
 
-  constructor(firstName: string, lastName: string, cinCard: string, phoneNumber: string, city: string, mail: string, role: Role, password: string) {
+
+  constructor(firstName?: string, lastName?: string, cinCard?: string, phoneNumber?: string, city?: string, mail?: string, role?: Role, password?: string) {
 
     this.firstName = firstName;
     this.lastName = lastName;
